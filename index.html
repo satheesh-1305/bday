@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Issai ❤️</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Floating hearts background -->
+  <div class="hearts-container">
+    <div class="heart"></div>
+    <div class="heart"></div>
+    <div class="heart"></div>
+    <div class="heart"></div>
+    <div class="heart"></div>
+    <div class="heart"></div>
+    <div class="heart"></div>
+    <div class="heart"></div>
+  </div>
+
+  <!-- Confetti container -->
+  <div class="confetti-container" id="confetti"></div>
+
+  <!-- Main hero section -->
+  <div class="hero">
+    <div class="sparkle sparkle-1">✨</div>
+    <div class="sparkle sparkle-2">✨</div>
+    <div class="sparkle sparkle-3">✨</div>
+    <div class="sparkle sparkle-4">✨</div>
+    <div class="sparkle sparkle-5">⭐</div>
+    <div class="sparkle sparkle-6">💫</div>
+    
+    <h1 class="title">
+      <span class="letter">H</span>
+      <span class="letter">a</span>
+      <span class="letter">p</span>
+      <span class="letter">p</span>
+      <span class="letter">y</span>
+      <span class="letter"> </span>
+      <span class="letter">B</span>
+      <span class="letter">i</span>
+      <span class="letter">r</span>
+      <span class="letter">t</span>
+      <span class="letter">h</span>
+      <span class="letter">d</span>
+      <span class="letter">a</span>
+      <span class="letter">y</span>
+    </h1>
+    
+    <h2 class="subtitle">Issai 💖</h2>
+    
+    <div class="cake-container">
+      <div class="cake">
+        <div class="candle">
+          <div class="flame"></div>
+        </div>
+        <div class="cake-layer layer-1">
+          <div class="frosting-drip drip-1"></div>
+          <div class="frosting-drip drip-2"></div>
+          <div class="frosting-drip drip-3"></div>
+        </div>
+        <div class="cake-layer layer-2">
+          <div class="frosting-drip drip-1"></div>
+          <div class="frosting-drip drip-2"></div>
+        </div>
+        <div class="cake-layer layer-3"></div>
+      </div>
+    </div>
+    
+    <p class="message">✨ Wishing you a day filled with joy and love! ✨</p>
+    
+    <button class="surprise-btn" onclick="showSurprise()">
+      <span class="btn-shine"></span>
+      <span class="btn-text">Click Here</span>
+      <span class="btn-icon">😁</span>
+    </button>
+  </div>
+
+  <!-- Surprise section -->
+  <div id="surprise" class="surprise-section hidden">
+    <div class="surprise-content">
+      <div class="love-letter">
+        <div class="envelope-wrapper">
+          <div class="envelope">
+            <div class="flap"></div>
+            <div class="letter-content">
+              <h2 class="surprise-title">Can we try again? 💖</h2>
+             
+              <div class="hearts-burst">
+                <span class="burst-heart">❤️</span>
+                <span class="burst-heart">💕</span>
+                <span class="burst-heart">💖</span>
+                <span class="burst-heart">💗</span>
+                <span class="burst-heart">💝</span>
+              </div>
+              <div class="response-buttons">
+                <button class="response-btn yes-btn" id="yesBtn" onclick="handleYes()">Yes! 💕</button>
+                <button class="response-btn maybe-btn" id="maybeBtn" onclick="handleMaybe()">Maybe... 🤔</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Photo gallery -->
+  <div class="gallery">
+    <h2 class="gallery-title">📸</h2>
+    <div class="gallery-grid">
+      <div class="photo-card">
+        <div class="photo-frame">
+          <img src="images/photo1.jpg" alt="Memory 1" onerror="this.src='https://via.placeholder.com/280x280/ff69b4/ffffff?text=Memory+1'">
+          <div class="photo-overlay">
+            <span class="heart-icon">💕</span>
+            <p class="photo-caption">Special Moment</p>
+          </div>
+        </div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-frame">
+          <img src="images/photo2.jpg" alt="Memory 2" onerror="this.src='https://via.placeholder.com/280x280/ff1493/ffffff?text=Memory+2'">
+          <div class="photo-overlay">
+            <span class="heart-icon">💕</span>
+            <p class="photo-caption">Beautiful Times</p>
+          </div>
+        </div>
+      </div>
+      <div class="photo-card">
+        <div class="photo-frame">
+          <img src="images/photo3.jpg" alt="Memory 3" onerror="this.src='https://via.placeholder.com/280x280/ff69b4/ffffff?text=Memory+3'">
+          <div class="photo-overlay">
+            <span class="heart-icon">💕</span>
+            <p class="photo-caption">Forever Cherished</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Countdown to next birthday -->
+  <div class="countdown-section">
+    <h3 class="countdown-title">Until Your Next Birthday 🎂</h3>
+    <div class="countdown-display" id="countdown">
+      <div class="countdown-item">
+        <span class="countdown-value" id="days">000</span>
+        <span class="countdown-label">Days</span>
+      </div>
+      <div class="countdown-item">
+        <span class="countdown-value" id="hours">00</span>
+        <span class="countdown-label">Hours</span>
+      </div>
+      <div class="countdown-item">
+        <span class="countdown-value" id="minutes">00</span>
+        <span class="countdown-label">Minutes</span>
+      </div>
+      <div class="countdown-item">
+        <span class="countdown-value" id="seconds">00</span>
+        <span class="countdown-label">Seconds</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
