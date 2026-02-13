@@ -46,9 +46,14 @@
       <span class="letter">d</span>
       <span class="letter">a</span>
       <span class="letter">y</span>
+      <span class="letter"> </span>
+      
+      <span class="letter">B</span>
+      <span class="letter">e</span>
+      <span class="letter">t</span>
+      <span class="letter">i</span>
+      <span class="letter">💖</span>
     </h1>
-    
-    <h2 class="subtitle">Issai 💖</h2>
     
     <div class="cake-container">
       <div class="cake">
@@ -77,62 +82,68 @@
     </button>
   </div>
 
-  <!-- Surprise section -->
-  <div id="surprise" class="surprise-section hidden">
-    <div class="surprise-content">
-      <div class="love-letter">
-        <div class="envelope-wrapper">
-          <div class="envelope">
-            <div class="flap"></div>
-            <div class="letter-content">
-              <h2 class="surprise-title">Can we try again? 💖</h2>
-             
-              <div class="hearts-burst">
-                <span class="burst-heart">❤️</span>
-                <span class="burst-heart">💕</span>
-                <span class="burst-heart">💖</span>
-                <span class="burst-heart">💗</span>
-                <span class="burst-heart">💝</span>
-              </div>
-              <div class="response-buttons">
-                <button class="response-btn yes-btn" id="yesBtn" onclick="handleYes()">Yes! 💕</button>
-                <button class="response-btn maybe-btn" id="maybeBtn" onclick="handleMaybe()">Maybe... 🤔</button>
+  <!-- Modal overlay -->
+  <div id="modalOverlay" class="modal-overlay hidden" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="close-btn" onclick="closeModal()">&times;</button>
+      
+      <!-- Surprise section inside modal -->
+      <div class="surprise-section-modal">
+        <div class="surprise-content">
+          <div class="love-letter">
+            <div class="envelope-wrapper">
+              <div class="envelope">
+                <div class="flap"></div>
+                <div class="letter-content">
+                  <h2 class="surprise-title">Can we try again? 💖</h2>
+                  
+                  <p class="promise-text">I know I’ve hurt you, and I regret how I treated you. I wish I could change it. Please give our relationship one more chance..I promise I’ll do better. Let’s face and solve everything together</p>
+                  
+                  <div class="hearts-burst">
+                    <span class="burst-heart">❤️</span>
+                    <span class="burst-heart">💕</span>
+                    <span class="burst-heart">💖</span>
+                    <span class="burst-heart">💗</span>
+                    <span class="burst-heart">💝</span>
+                  </div>
+                  <div class="response-buttons">
+                    <button class="response-btn yes-btn" id="yesBtn" onclick="handleYes()">Yes! 💕</button>
+                    <button class="response-btn maybe-btn" id="maybeBtn" onclick="handleMaybe()">Maybe... 🤔</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Photo gallery -->
-  <div class="gallery">
-    <h2 class="gallery-title">📸</h2>
-    <div class="gallery-grid">
-      <div class="photo-card">
-        <div class="photo-frame">
-          <img src="images/photo1.jpg" alt="Memory 1" onerror="this.src='https://via.placeholder.com/280x280/ff69b4/ffffff?text=Memory+1'">
-          <div class="photo-overlay">
-            <span class="heart-icon">💕</span>
-            <p class="photo-caption">Special Moment</p>
+      <!-- Photo gallery inside modal -->
+      <div class="gallery-modal">
+        <h3 class="gallery-title">Love You 💕</h3>
+        <div class="gallery-grid">
+          <div class="photo-card">
+            <div class="photo-frame">
+              <img src="images/photo1.jpeg" alt="Memory 1" onerror="this.src='https://via.placeholder.com/280x280/ff69b4/ffffff?text=Memory+1'">
+              <div class="photo-overlay">
+                <span class="heart-icon">💕</span>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="photo-card">
-        <div class="photo-frame">
-          <img src="images/photo2.jpg" alt="Memory 2" onerror="this.src='https://via.placeholder.com/280x280/ff1493/ffffff?text=Memory+2'">
-          <div class="photo-overlay">
-            <span class="heart-icon">💕</span>
-            <p class="photo-caption">Beautiful Times</p>
+          <div class="photo-card">
+            <div class="photo-frame">
+              <img src="images/photo2.jpeg" alt="Memory 2" onerror="this.src='https://via.placeholder.com/280x280/ff1493/ffffff?text=Memory+2'">
+              <div class="photo-overlay">
+                <span class="heart-icon">💕</span>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="photo-card">
-        <div class="photo-frame">
-          <img src="images/photo3.jpg" alt="Memory 3" onerror="this.src='https://via.placeholder.com/280x280/ff69b4/ffffff?text=Memory+3'">
-          <div class="photo-overlay">
-            <span class="heart-icon">💕</span>
-            <p class="photo-caption">Forever Cherished</p>
+          <div class="photo-card">
+            <div class="photo-frame">
+              <img src="images/photo3.jpeg" alt="Memory 3" onerror="this.src='https://via.placeholder.com/280x280/ff69b4/ffffff?text=Memory+3'">
+              <div class="photo-overlay">
+                <span class="heart-icon">💕</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

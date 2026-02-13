@@ -1,15 +1,27 @@
-// Show surprise function with enhanced effects
+// Show surprise function with modal
 function showSurprise() {
-  const surpriseSection = document.getElementById('surprise');
+  const modalOverlay = document.getElementById('modalOverlay');
   
-  // Show the surprise section
-  surpriseSection.classList.remove('hidden');
+  // Show the modal
+  modalOverlay.classList.remove('hidden');
+  
+  // Prevent body scroll
+  document.body.style.overflow = 'hidden';
   
   // Trigger confetti explosion
   createConfetti();
+}
+
+// Close modal function
+function closeModal(event) {
+  // Only close if clicking the overlay itself, not its children
+  if (event && event.target.id !== 'modalOverlay') return;
   
-  // Scroll to surprise smoothly
-  surpriseSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const modalOverlay = document.getElementById('modalOverlay');
+  modalOverlay.classList.add('hidden');
+  
+  // Re-enable body scroll
+  document.body.style.overflow = 'auto';
 }
 
 // Create enhanced confetti effect
@@ -394,4 +406,11 @@ window.addEventListener('scroll', () => {
     const speed = 0.5 + (index * 0.1);
     element.style.transform = `translateY(${scrolled * speed}px)`;
   });
+});
+
+// Close modal on ESC key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeModal();
+  }
 });
