@@ -1,4 +1,222 @@
-// Show surprise function with modal
+// Candle blowing interaction
+let blowStartTime = 0;
+let isBlowing = false;
+const BLOW_DURATION = 2000; // Hold for 2 seconds
+
+let flame = null;
+let candle = null;
+let candleHint = null;
+let cake = null;
+let hapticInterval = null;
+
+// Handle touch/mouse events for blowing candle
+function startBlowing(e) {
+  e.preventDefault();
+  isBlowing = true;
+  blowStartTime = Date.now();
+  
+  if (flame) {
+    // Add blowing animation
+    flame.style.animation = 'blowFlicker 0.1s ease-in-out infinite';
+  }
+  
+  // Start haptic feedback (vibrate every 200ms while holding)
+  if (navigator.vibrate) {
+    navigator.vibrate(50); // Initial vibration
+    hapticInterval = setInterval(() => {
+      if (isBlowing) {
+        navigator.vibrate(30); // Continuous light vibrations
+      }
+    }, 200);
+  }
+  
+  // Start checking if held long enough
+  checkBlowProgress();
+}
+
+function stopBlowing(e) {
+  e.preventDefault();
+  isBlowing = false;
+  
+  // Stop haptic feedback
+  if (hapticInterval) {
+    clearInterval(hapticInterval);
+    hapticInterval = null;
+  }
+  
+  if (flame) {
+    flame.style.animation = 'flicker 0.3s ease-in-out infinite alternate';
+  }
+}
+
+function checkBlowProgress() {
+  if (!isBlowing) return;
+  
+  const elapsed = Date.now() - blowStartTime;
+  const progress = Math.min(elapsed / BLOW_DURATION, 1);
+  
+  // Reduce flame opacity as they hold
+  if (flame) {
+    flame.style.opacity = 1 - progress;
+    flame.style.transform = `translateX(-50%) scale(${1 - progress * 0.5})`;
+  }
+  
+  // Check if blown out
+  if (progress >= 1) {
+    blowOutCandle();
+    return;
+  }
+  
+  // Continue checking
+  requestAnimationFrame(checkBlowProgress);
+}
+
+// Candle blown out - show modal!
+function blowOutCandle() {
+  isBlowing = false;
+  
+  // Stop haptic feedback
+  if (hapticInterval) {
+    clearInterval(hapticInterval);
+    hapticInterval = null;
+  }
+  
+  // Final strong vibration for success
+  if (navigator.vibrate) {
+    navigator.vibrate([100, 50, 100, 50, 200]);
+  }
+  
+  // Hide flame with puff of smoke effect
+  if (flame) {
+    flame.style.opacity = '0';
+    flame.style.transform = 'translateX(-50%) scale(0)';
+  }
+  
+  // Create smoke puff
+  createSmokePuff();
+  
+  // Hide hint
+  if (candleHint) {
+    candleHint.style.opacity = '0';
+    candleHint.style.transform = 'translateY(20px)';
+  }
+  
+  // Trigger confetti
+  setTimeout(() => {
+    createConfetti();
+  }, 500);
+  
+  // Show success message
+  setTimeout(() => {
+    showResponseMessage("Happy Birthday! 💖💫", true);
+  }, 800);
+  
+  // Show the modal after a moment
+  setTimeout(() => {
+    showSurprise();
+  }, 2000);
+  
+  // Remove event listeners from both candle and cake
+  if (candle) {
+    candle.removeEventListener('touchstart', startBlowing);
+    candle.removeEventListener('touchend', stopBlowing);
+    candle.removeEventListener('mousedown', startBlowing);
+    candle.removeEventListener('mouseup', stopBlowing);
+  }
+  
+  if (cake) {
+    cake.removeEventListener('touchstart', startBlowing);
+    cake.removeEventListener('touchend', stopBlowing);
+    cake.removeEventListener('mousedown', startBlowing);
+    cake.removeEventListener('mouseup', stopBlowing);
+  }
+}
+
+// Reset candle to initial state
+function resetCandle() {
+  if (flame) {
+    flame.style.opacity = '1';
+    flame.style.transform = 'translateX(-50%) scale(1)';
+    flame.style.animation = 'flicker 0.3s ease-in-out infinite alternate';
+  }
+  
+  if (candleHint) {
+    candleHint.style.opacity = '1';
+    candleHint.style.transform = 'translateY(0)';
+  }
+  
+  isBlowing = false;
+  blowStartTime = 0;
+  
+  // Clear any running haptic feedback
+  if (hapticInterval) {
+    clearInterval(hapticInterval);
+    hapticInterval = null;
+  }
+  
+  // Re-add event listeners to both candle and cake
+  if (candle) {
+    candle.addEventListener('touchstart', startBlowing, { passive: false });
+    candle.addEventListener('touchend', stopBlowing, { passive: false });
+    candle.addEventListener('mousedown', startBlowing);
+    candle.addEventListener('mouseup', stopBlowing);
+    candle.addEventListener('mouseleave', stopBlowing);
+  }
+  
+  if (cake) {
+    cake.addEventListener('touchstart', startBlowing, { passive: false });
+    cake.addEventListener('touchend', stopBlowing, { passive: false });
+    cake.addEventListener('mousedown', startBlowing);
+    cake.addEventListener('mouseup', stopBlowing);
+    cake.addEventListener('mouseleave', stopBlowing);
+  }
+}
+
+// Create smoke puff effect
+function createSmokePuff() {
+  for (let i = 0; i < 5; i++) {
+    setTimeout(() => {
+      const smoke = document.createElement('div');
+      smoke.textContent = '💨';
+      smoke.style.position = 'fixed';
+      smoke.style.left = '50%';
+      smoke.style.top = '35%';
+      smoke.style.fontSize = '2rem';
+      smoke.style.pointerEvents = 'none';
+      smoke.style.zIndex = '9999';
+      smoke.style.opacity = '0.8';
+      
+      document.body.appendChild(smoke);
+      
+      let posY = window.innerHeight * 0.35;
+      let posX = window.innerWidth / 2;
+      let opacity = 0.8;
+      let rotation = 0;
+      
+      const animate = () => {
+        posY -= 2;
+        posX += (Math.random() - 0.5) * 3;
+        opacity -= 0.02;
+        rotation += 5;
+        
+        smoke.style.top = posY + 'px';
+        smoke.style.left = posX + 'px';
+        smoke.style.opacity = opacity;
+        smoke.style.transform = `rotate(${rotation}deg) scale(${1 + (0.8 - opacity)})`;
+        
+        if (opacity > 0) {
+          requestAnimationFrame(animate);
+        } else {
+          smoke.remove();
+        }
+      };
+      
+      requestAnimationFrame(animate);
+    }, i * 100);
+  }
+}
+
+// Show surprise modal
 function showSurprise() {
   const modalOverlay = document.getElementById('modalOverlay');
   
@@ -22,6 +240,41 @@ function closeModal(event) {
   
   // Re-enable body scroll
   document.body.style.overflow = 'auto';
+  
+  // Reset the candle so it can be blown again
+  resetCandle();
+  
+  // Reset button states
+  resetButtons();
+  
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Reset buttons
+function resetButtons() {
+  const yesBtn = document.getElementById('yesBtn');
+  const maybeBtn = document.getElementById('maybeBtn');
+  const responseButtons = document.querySelector('.response-buttons');
+  
+  maybeClickCount = 0;
+  
+  if (yesBtn) {
+    yesBtn.style.transform = 'scale(1)';
+    yesBtn.style.animation = '';
+  }
+  
+  if (maybeBtn) {
+    maybeBtn.style.transform = 'scale(1)';
+    maybeBtn.style.opacity = '1';
+    maybeBtn.style.pointerEvents = 'auto';
+    maybeBtn.style.visibility = 'visible';
+  }
+  
+  if (responseButtons) {
+    responseButtons.style.opacity = '1';
+    responseButtons.style.visibility = 'visible';
+  }
 }
 
 // Create enhanced confetti effect
@@ -67,13 +320,29 @@ function createConfetti() {
   }
 }
 
+// Track how many times Maybe was clicked
+let maybeClickCount = 0;
+const maybeMessages = [
+  "Are you sure? 🥺",
+  "Please reconsider! 💭",
+  "Just say yes! 💕",
+  "You know you want to! 😊",
+  "Come on... 🙏",
+  "Pretty please! 💖",
+  "Last chance! 😢"
+];
+
 // Handle "Yes" response
 function handleYes() {
-  // Create massive heart explosion
-  createMassiveHeartExplosion();
+  console.log('Yes button clicked!');
   
-  // Show success message
+  // Show success message FIRST
   showResponseMessage("HeHe 💖 🎉", true);
+  
+  // Create massive heart explosion after a tiny delay
+  setTimeout(() => {
+    createMassiveHeartExplosion();
+  }, 100);
   
   // Trigger extra confetti
   setTimeout(() => {
@@ -86,28 +355,26 @@ function handleYes() {
     if (buttons) {
       buttons.style.opacity = '0';
       buttons.style.transition = 'opacity 0.5s ease';
+      setTimeout(() => {
+        buttons.style.visibility = 'hidden';
+      }, 500);
     }
   }, 2000);
 }
 
-// Track how many times Maybe was clicked
-let maybeClickCount = 0;
-const maybeMessages = [
-  "Are you sure? 🥺",
-  "Please reconsider! 💭",
-  "Just say yes! 💕",
-  "You know you want to! 😊",
-  "Come on... 🙏",
-  "Pretty please? 💖",
-  "Last chance! 😢"
-];
-
 // Handle "Maybe" button - it shrinks and Yes grows
 function handleMaybe() {
+  console.log('Maybe button clicked! Count:', maybeClickCount + 1);
+  
   maybeClickCount++;
   
   const yesBtn = document.getElementById('yesBtn');
   const maybeBtn = document.getElementById('maybeBtn');
+  
+  if (!yesBtn || !maybeBtn) {
+    console.error('Buttons not found!');
+    return;
+  }
   
   // Calculate new scales
   const maybeScale = Math.max(0.3, 1 - (maybeClickCount * 0.15));
@@ -115,7 +382,10 @@ function handleMaybe() {
   
   // Apply transformations
   maybeBtn.style.transform = `scale(${maybeScale})`;
+  maybeBtn.style.transition = 'transform 0.3s ease';
+  
   yesBtn.style.transform = `scale(${yesScale})`;
+  yesBtn.style.transition = 'transform 0.3s ease';
   
   // Show encouraging message
   if (maybeClickCount <= maybeMessages.length) {
@@ -124,8 +394,11 @@ function handleMaybe() {
   
   // After 7 clicks, Maybe button becomes too small and disappears
   if (maybeClickCount >= 7) {
-    maybeBtn.style.opacity = '0';
-    maybeBtn.style.pointerEvents = 'none';
+    setTimeout(() => {
+      maybeBtn.style.opacity = '0';
+      maybeBtn.style.pointerEvents = 'none';
+      maybeBtn.style.transition = 'opacity 0.5s ease, transform 0.3s ease';
+    }, 100);
     
     setTimeout(() => {
       showResponseMessage("Just say YES! nigga ✨", true);
@@ -222,21 +495,6 @@ function showResponseMessage(message, isPositive) {
   }, 3000);
 }
 
-// Add click effect to photos
-document.addEventListener('DOMContentLoaded', function() {
-  const photoFrames = document.querySelectorAll('.photo-frame');
-  
-  photoFrames.forEach(frame => {
-    frame.addEventListener('click', function() {
-      createHeartExplosion(this);
-    });
-  });
-  
-  // Initialize countdown
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
-});
-
 // Create heart explosion effect on photo click
 function createHeartExplosion(element) {
   const hearts = ['❤️', '💕', '💖', '💗', '💝', '💘'];
@@ -317,53 +575,6 @@ function createFloatingParticles() {
   }, 2500);
 }
 
-// Initialize floating particles
-createFloatingParticles();
-
-// Add CSS animations
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes fadeOut {
-    to {
-      opacity: 0;
-      transform: translateY(-40px) scale(0.3);
-    }
-  }
-  
-  @keyframes zoomInOut {
-    0% {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0);
-    }
-    20% {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1.1);
-    }
-    80% {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-    100% {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0.8);
-    }
-  }
-  
-  @keyframes shake {
-    0%, 100% { transform: translateX(0) scale(var(--current-scale, 1)); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px) scale(var(--current-scale, 1)); }
-    20%, 40%, 60%, 80% { transform: translateX(5px) scale(var(--current-scale, 1)); }
-  }
-  
-  @keyframes floatParticle {
-    to {
-      transform: translateY(-100vh);
-      opacity: 0;
-    }
-  }
-`;
-document.head.appendChild(style);
-
 // Countdown timer to next birthday
 function updateCountdown() {
   // Set next birthday - February 16
@@ -397,15 +608,97 @@ function updateCountdown() {
   if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
 }
 
-// Add parallax effect to hero section
-window.addEventListener('scroll', () => {
-  const scrolled = window.pageYOffset;
-  const parallaxElements = document.querySelectorAll('.sparkle');
+// Add CSS animations
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes blowFlicker {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(0.8) translateX(-5px); }
+  }
   
-  parallaxElements.forEach((element, index) => {
-    const speed = 0.5 + (index * 0.1);
-    element.style.transform = `translateY(${scrolled * speed}px)`;
+  @keyframes zoomInOut {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0);
+    }
+    20% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+    80% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.8);
+    }
+  }
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0) scale(var(--current-scale, 1)); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px) scale(var(--current-scale, 1)); }
+    20%, 40%, 60%, 80% { transform: translateX(5px) scale(var(--current-scale, 1)); }
+  }
+  
+  @keyframes floatParticle {
+    to {
+      transform: translateY(-100vh);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes pulseGlow {
+    0%, 100% {
+      box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
+      transform: scale(1);
+    }
+    50% {
+      box-shadow: 0 8px 30px rgba(255, 255, 255, 0.5);
+      transform: scale(1.05);
+    }
+  }
+`;
+document.head.appendChild(style);
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+  // Get elements
+  flame = document.getElementById('flame');
+  candle = document.getElementById('candle');
+  cake = document.getElementById('cake');
+  candleHint = document.getElementById('candleHint');
+  
+  // Add candle blowing listeners to BOTH candle and entire cake
+  if (candle) {
+    candle.addEventListener('touchstart', startBlowing, { passive: false });
+    candle.addEventListener('touchend', stopBlowing, { passive: false });
+    candle.addEventListener('mousedown', startBlowing);
+    candle.addEventListener('mouseup', stopBlowing);
+    candle.addEventListener('mouseleave', stopBlowing);
+  }
+  
+  if (cake) {
+    cake.addEventListener('touchstart', startBlowing, { passive: false });
+    cake.addEventListener('touchend', stopBlowing, { passive: false });
+    cake.addEventListener('mousedown', startBlowing);
+    cake.addEventListener('mouseup', stopBlowing);
+    cake.addEventListener('mouseleave', stopBlowing);
+  }
+  
+  // Photo click effects
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('.photo-frame')) {
+      createHeartExplosion(e.target.closest('.photo-frame'));
+    }
   });
+  
+  // Initialize countdown
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+  
+  // Initialize floating particles
+  createFloatingParticles();
 });
 
 // Close modal on ESC key

@@ -56,9 +56,9 @@
     </h1>
     
     <div class="cake-container">
-      <div class="cake">
-        <div class="candle">
-          <div class="flame"></div>
+      <div class="cake" id="cake">
+        <div class="candle" id="candle">
+          <div class="flame" id="flame"></div>
         </div>
         <div class="cake-layer layer-1">
           <div class="frosting-drip drip-1"></div>
@@ -71,18 +71,17 @@
         </div>
         <div class="cake-layer layer-3"></div>
       </div>
+      
+      <!-- Instruction hint -->
+      <div class="candle-hint" id="candleHint">
+        <p>🎂 Tap and hold the cake🕯️</p>
+      </div>
     </div>
     
     <p class="message">✨ Wishing you a day filled with joy and love! ✨</p>
-    
-    <button class="surprise-btn" onclick="showSurprise()">
-      <span class="btn-shine"></span>
-      <span class="btn-text">Click Here</span>
-      <span class="btn-icon">😁</span>
-    </button>
   </div>
 
-  <!-- Modal overlay -->
+  <!-- Modal overlay - shown AFTER candle is blown -->
   <div id="modalOverlay" class="modal-overlay hidden" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
       <button class="close-btn" onclick="closeModal()">&times;</button>
@@ -97,7 +96,7 @@
                 <div class="letter-content">
                   <h2 class="surprise-title">Can we try again? 💖</h2>
                   
-                  <p class="promise-text">I know I’ve hurt you, and I regret how I treated you. I wish I could change it. Please give our relationship one more chance..I promise I’ll do better. Let’s face and solve everything together</p>
+                  <p class="promise-text">I know I've hurt you, and I regret how I treated you. I wish I could change it. Please give our relationship one more chance..I promise I'll do better. Let's face and solve everything together</p>
                   
                   <div class="hearts-burst">
                     <span class="burst-heart">❤️</span>
